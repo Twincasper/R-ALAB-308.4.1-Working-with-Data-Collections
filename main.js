@@ -32,50 +32,38 @@ const csvToArrayDynamic = () => {
       row.push(cell);
       parentMatrix.push(row);
     }
-    
-    return parentMatrix;
   }
+  return parentMatrix;
 }
 
 // Part 3, convert parentMatrix to array of objects
 
+const arrayToObject = (matrix) => {
+  let objParent = [];
 
-let objCell = "";
-let obj = {};
-let keyCounter = 0;
-let objParent = [];
+  // Grab the headers from the first array and store those in an array
+  const headers = matrix[0];
 
-for (let i = csv.indexOf("\n") + 1; i < csv.length; i++) {
-  if (csv[i] !== "," && csv[i] !== "\n") {
-    objCell += csv[i];
-  } else if (csv[i] === ",") {
-    switch (keyCounter) {
-      case 0:
-        obj.id = objCell;
-        break;
-      case 1:
-        obj.name = objCell;
-        break;
-      case 2:
-        obj.occupation = objCell;
-        break;
+  // Loop through the rest of the rows aka the values, so we start from index 1
+  for (let i = 1; i < matrix.length; i++) {
+    let obj = {};
+    let currentRow = matrix[i];
+
+    // Loop through each cell in the current row
+    for (let j = 0; j < headers.length; j++) {
+      // J directly corresponds to the index of the header for the current cell
+      obj[headers[j].toLowerCase()] = currentRow[j];
     }
-    objCell = "";
-    keyCounter++;
-  } else if (csv[i] === "\n") {
-    obj.age = objCell;
-    objCell = "";
-    objParent.push(obj);
-    obj = {};
-    keyCounter = 0;
-  }
-}
 
-// Handle the last objCell if the CSV doesn't end with a newline
-if (objCell !== "") {
-  obj.age = objCell;
-  objParent.push(obj);
-}
+    objParent.push(obj);
+  }
+
+  return objParent;
+};
+
+parentMatrix = csvToArrayDynamic(csv);
+
+let objParent = arrayToObject(parentMatrix);
 
 console.log(objParent);
 
