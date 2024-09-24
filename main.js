@@ -8,33 +8,34 @@ const csvToArrayDynamic = () => {
 
   let row = [];
   let cell = "";
-  let cols = 0;
+  let parentMatrix = [];
 
   for (let i = 0; i < csv.length; i++) {
     if (csv[i] !== "," && csv[i] !== "\n") {
       // This means we're still on the current cell, so we add our current letter to the cell
       cell += csv[i];
     } else if (csv[i] === ",") {
-      // New cell, same row. So we reset cell, but increment cols
+      // New cell, same row. Push the current cell into the row
       row.push(cell);
-      cell = "";
-      cols++;
+      cell = ""; // Reset the cell
     } else if (csv[i] === "\n") {
-      // New cell, as well as a new row. So reset everything.
-      row.push(cell);
-      cell = "";
-      parentMatrix.push(row);
-      row = [];
-      cols = 0; // If we don't reset this, it'll keep adding to cols every row.
-    }
-    // Push the last row if there's no newline at the end of the CSV
-    if (cell.length > 0) {
-      row.push(cell);
-      parentMatrix.push(row);
+      // End of the row, push the current cell and reset row
+      row.push(cell); // Push the last cell in the row
+      parentMatrix.push(row); // Push the completed row to the matrix
+      row = []; // Reset row for the next line
+      cell = ""; // Reset cell
     }
   }
+
+  // After the loop, we need to push any remaining data in the last row
+  if (cell.length > 0) {
+    row.push(cell); // Push the last cell
+    parentMatrix.push(row); // Push the last row to the matrix
+  }
+
   return parentMatrix;
-}
+};
+
 
 // Part 3, convert parentMatrix to array of objects
 
@@ -63,29 +64,31 @@ const arrayToObject = (matrix) => {
 
 parentMatrix = csvToArrayDynamic(csv);
 
-let objParent = arrayToObject(parentMatrix);
+let arrOfObjects = arrayToObject(parentMatrix);
 
-console.log(objParent);
+console.log(arrOfObjects);
 
 // Part 4
 
-objParent.pop();
+arrOfObjects.pop();
 
-objParent.splice(1, 0, { id: "48", name: "Barry", occupation: "Runner", age: "25" });
+arrOfObjects.splice(1, 0, { id: "48", name: "Barry", occupation: "Runner", age: "25" });
 
-objParent.push({ id: "7", name: "Bilbo", occupation: "None", age: "111" });
+arrOfObjects.push({ id: "7", name: "Bilbo", occupation: "None", age: "111" });
 
-console.log("After part 4", objParent);
+console.log("After removal, insertion and push",arrOfObjects);
 
 // Average ages
 
 let totalAge = 0;
 
-for (let i = 0; i < objParent.length; i++) {
-  totalAge += objParent[i].age;
+for (let i = 0; i < arrOfObjects.length; i++) {
+  totalAge += parseInt(arrOfObjects[i].age); // Convert age to a number
 }
 
-let averageAge = totalAge / objParent.length;
+let averageAge = totalAge / arrOfObjects.length;
+
+console.log("Average Age:", averageAge);  // This will print the correct average age
 
 // Part 5
 
@@ -95,9 +98,9 @@ let averageAge = totalAge / objParent.length;
 // Each value will also be seperated by a , and then we need \n at the end of each obj's values
 // Join all of that together in one string
 
-const columns = Object.keys(objParent[0]).join(",");
+const columns = Object.keys(arrOfObjects[0]).join(",");
 
-const values = objParent.map(obj => Object.values(obj).join(",")).join("\n");
+const values = arrOfObjects.map(obj => Object.values(obj).join(",")).join("\n");
 
 const finalCsv = `${columns}\n${values}`;
 
