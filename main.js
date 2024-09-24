@@ -2,9 +2,10 @@
 
 csv = "ID,Name,Occupation,Age\n42,Bruce,Knight,41\n57,Bob,Fry Cook,19\n63,Blaine,Quiz Master,58\n98,Bill,Doctor’s Assistant,26";
 
+let parentMatrix = [];
+
 const csvToArrayDynamic = () => {
 
-  let parent = [];
   let row = [];
   let cell = "";
   let cols = 0;
@@ -22,21 +23,22 @@ const csvToArrayDynamic = () => {
       // New cell, as well as a new row. So reset everything.
       row.push(cell);
       cell = "";
-      parent.push(row);
+      parentMatrix.push(row);
       row = [];
       cols = 0; // If we don't reset this, it'll keep adding to cols every row.
     }
     // Push the last row if there's no newline at the end of the CSV
     if (cell.length > 0) {
       row.push(cell);
-      parent.push(row);
+      parentMatrix.push(row);
     }
     
-    return parent;
+    return parentMatrix;
   }
 }
 
-// Part 3, convert csv to array of objects
+// Part 3, convert parentMatrix to array of objects
+
 
 let objCell = "";
 let obj = {};
