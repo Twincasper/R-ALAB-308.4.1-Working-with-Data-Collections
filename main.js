@@ -64,9 +64,11 @@ const arrayToObject = (matrix) => {
 
 parentMatrix = csvToArrayDynamic(csv);
 
+console.log("Part 2",parentMatrix);
+
 let arrOfObjects = arrayToObject(parentMatrix);
 
-console.log(arrOfObjects);
+console.log("Part 3",arrOfObjects);
 
 // Part 4
 
@@ -76,19 +78,19 @@ arrOfObjects.splice(1, 0, { id: "48", name: "Barry", occupation: "Runner", age: 
 
 arrOfObjects.push({ id: "7", name: "Bilbo", occupation: "None", age: "111" });
 
-console.log("After removal, insertion and push",arrOfObjects);
+console.log("After removal, insertion and push of part 4",arrOfObjects);
 
 // Average ages
 
 let totalAge = 0;
 
 for (let i = 0; i < arrOfObjects.length; i++) {
-  totalAge += parseInt(arrOfObjects[i].age); // Convert age to a number
+  totalAge += parseInt(arrOfObjects[i].age);
 }
 
 let averageAge = totalAge / arrOfObjects.length;
 
-console.log("Average Age:", averageAge);  // This will print the correct average age
+console.log("Average Age:", averageAge);
 
 // Part 5
 
@@ -104,4 +106,4 @@ const values = arrOfObjects.map(obj => Object.values(obj).join(",")).join("\n");
 
 const finalCsv = `${columns}\n${values}`;
 
-console.log(finalCsv);
+console.log("Part 5",finalCsv);
